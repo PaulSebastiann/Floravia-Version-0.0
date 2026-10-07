@@ -1,59 +1,116 @@
-# Floravia — tienda de flores de demostración para Quito
+# 🌸 Floravia
 
-## Ejecución
+**Flores, plantas y semillas para llenar de vida los espacios de Quito.**
 
-Este proyecto corre sobre la plantilla TanStack Start de Lovable. Instala dependencias con `bun install` y ejecuta `bun run dev`. Abre `http://localhost:8080`. No hay servidor de datos ni pagos reales. La petición de HTML/CSS/JavaScript vanilla se adaptó al runtime fijo del proyecto; la interfaz utiliza React/TypeScript, CSS y rutas TanStack. No hay páginas HTML independientes.
+Floravia es una tienda en línea de flores con entrega a domicilio en Quito, Ecuador. Este proyecto es una maqueta de demostración: el carrito, el checkout y el formulario de contacto son visuales y no envían ni guardan datos.
 
-### Windows con Node.js
+🔗 **Sitio:** https://paulsebastiann.github.io/Floravia/
 
-Si PowerShell bloquea `npm.ps1`, usa los comandos `.cmd` desde esta carpeta:
+---
 
-```powershell
-npm.cmd install
-npm.cmd run dev
+## 🌿 Nosotros
+
+### Naturaleza para celebrar la vida
+
+Floravia nació del deseo de compartir la belleza sencilla de una flor, una planta que crece con paciencia y una semilla llena de posibilidades.
+
+Empezamos seleccionando flores para ocasiones especiales. Con el tiempo entendimos que nuestros clientes también buscaban llevar naturaleza a su hogar. Por eso hoy reunimos arreglos florales, plantas y semillas en un mismo espacio, con recomendaciones cercanas y el cariño de un negocio local.
+
+Cada pedido se prepara pensando en la persona que lo recibe: el color, la ocasión, el espacio y ese pequeño detalle que hace que un regalo se sienta propio.
+
+### 🎯 Misión
+
+Hacer que cuidar y regalar naturaleza sea más cercano. Trabajamos para que elegir flores, plantas o semillas sea una experiencia clara, cálida y confiable, desde la primera consulta hasta la entrega.
+
+### 💐 Qué ofrecemos
+
+| Categoría | Descripción |
+|---|---|
+| **Flores y arreglos** | Ramos, cajas, centros de mesa y diseños para celebrar, acompañar o recordar momentos importantes. |
+| **Plantas** | Plantas de interior y exterior, suculentas y opciones con maceta para cada espacio y nivel de cuidado. |
+| **Semillas** | Flores, hortalizas y hierbas aromáticas para empezar un pequeño jardín desde casa. |
+
+### 🌱 Nuestros valores
+
+- **Frescura:** elegimos cada producto pensando en su vitalidad y duración.
+- **Calidad:** cuidamos los materiales, la presentación y cada acabado.
+- **Atención personalizada:** escuchamos tu idea para ayudarte a elegir mejor.
+- **Puntualidad:** coordinamos tus entregas a domicilio dentro de Quito.
+- **Cuidado del ambiente:** preferimos prácticas y materiales que respeten la naturaleza.
+
+### ✨ Por qué elegirnos
+
+- **Flores frescas:** arreglos preparados con atención al detalle y listos para regalar.
+- **Entrega a domicilio en Quito:** recibe tu pedido en la dirección y el horario coordinados.
+- **Asesoría para tus plantas:** te orientamos para que cada planta encuentre su lugar y sus cuidados.
+- **Arreglos a tu medida:** convertimos una ocasión, un color o una idea en un detalle especial.
+
+> *Una flor, una planta o una semilla puede cambiar un día.*
+
+---
+
+## 📬 Contacto
+
+### Hablemos de naturaleza
+
+Cuéntanos qué tienes en mente y te ayudaremos a encontrar flores, plantas o semillas para tu próximo momento. Atendemos consultas, pedidos especiales y recomendaciones para tus plantas.
+
+| | |
+|---|---|
+| 📍 **Dirección** | [Sector/Calle], Quito, Ecuador |
+| 📞 **Teléfono / WhatsApp** | +593 9X XXX XXXX |
+| ✉️ **Correo** | contacto@floravia.com |
+| 🕗 **Horario** | Lunes a sábado 08:00–19:00, domingos 09:00–14:00 |
+| 💬 **WhatsApp** | [Escribir por WhatsApp](https://wa.me/5939XXXXXXXX) |
+| 📸 **Instagram** | [@floravia](https://www.instagram.com/floravia) |
+| 👍 **Facebook** | [Floravia](https://www.facebook.com/floravia) |
+
+> Los datos de contacto son marcadores de posición; reemplázalos por los reales.
+
+### Formulario de contacto
+
+El formulario solicita nombre, correo electrónico, teléfono, el interés (flores, plantas, semillas, pedido especial u otro) y un mensaje. Es una maqueta visual y no envía datos.
+
+### ❓ Preguntas frecuentes
+
+**¿A qué zonas de Quito entregan?**
+Coordinamos entregas dentro de Quito. Escríbenos para confirmar cobertura y costo según tu dirección.
+
+**¿Cuánto demora una entrega?**
+Depende de la disponibilidad y del horario elegido. Para pedidos del mismo día, consúltanos antes de confirmar.
+
+**¿Pueden preparar pedidos para eventos?**
+Sí. Podemos conversar sobre cantidades, colores, estilo y presupuesto para celebraciones y eventos.
+
+**¿Cómo cuido mi planta?**
+Te damos recomendaciones de luz, riego y ubicación según la especie que elijas.
+
+---
+
+## 🛠️ Tecnologías
+
+- React 19 y TypeScript
+- TanStack Start y TanStack Router
+- Tailwind CSS y Radix UI
+- Vite
+
+## 🚀 Ejecución local
+
+```bash
+bun install
+bun run dev
 ```
 
-Para abrir la aplicación desde otra computadora conectada a la misma red, inicia el servidor así:
+Abre `http://localhost:8080`. En Windows con Node.js puedes usar `npm.cmd install` y `npm.cmd run dev`.
 
-```powershell
-npm.cmd run dev -- --host 0.0.0.0
-```
-
-Consulta la dirección IPv4 con `ipconfig` y abre `http://TU-IP:8080` en la otra computadora. El servidor debe permanecer abierto y Windows puede pedir permiso en el firewall.
-
-## Estructura
+## 📁 Estructura
 
 - `src/routes/`: inicio, catálogo, detalle, carrito, checkout, confirmación, nosotros y contacto.
 - `src/components/shop/`: cabecera, pie, migas y tarjetas compartidas.
-- `src/lib/products.ts`: 12 productos ficticios, precios y tarifa de entrega.
-- `src/lib/store.tsx`: estado visual temporal del carrito, sin persistencia.
-- `src/styles.css`: variables semánticas, estilos, animaciones y adaptación móvil.
-- `src/assets/`: fotografías generadas para la interfaz.
+- `src/lib/products.ts`: productos ficticios, precios y tarifa de entrega.
+- `src/lib/store.tsx`: estado temporal del carrito, sin persistencia.
+- `src/styles.css`: estilos, animaciones y adaptación móvil.
 
-## Flujo de compra y modelo mental
+---
 
-Descubrir en inicio → explorar el catálogo → seleccionar en detalle → revisar el carrito → recorrer la maqueta de contacto, entrega y confirmación. Usa enlaces claros y migas para volver sin perder el contexto. Los campos son puramente visuales: no se validan, envían ni guardan datos.
-
-## Heurísticas de Nielsen aplicadas
-
-1. **Estado visible:** contador, aviso accesible al agregar, resumen y progreso de compra.
-2. **Mundo real:** ocasiones, ramos, horarios y precios en USD con entrega en Quito.
-3. **Control y libertad:** volver, reducir cantidad, eliminar y limpiar filtros.
-4. **Consistencia:** cabecera, botones, tarjetas, títulos y navegación compartidos.
-5. **Prevención de errores:** no se pueden agregar flores agotadas; cantidad acotada; checkout vacío bloqueado.
-6. **Reconocimiento:** tarjetas con foto, precio y disponibilidad; resumen permanente al comprar.
-7. **Flexibilidad:** navegación clara y accesos directos por ocasión.
-8. **Minimalismo:** pasos cortos y opciones agrupadas, sin datos bancarios innecesarios.
-9. **Recuperación:** errores específicos junto al campo y estados vacíos con salida clara.
-10. **Ayuda:** contacto con preguntas frecuentes y aclaraciones sobre la simulación.
-
-## WCAG 2.2: cuatro principios
-
-- **Perceptible:** texto alternativo para fotos informativas, etiquetas visibles y mensajes que usan palabras además del color.
-- **Operable:** elementos nativos activables con teclado, salto al contenido, foco visible, controles de 44 px y sin barreras al cerrar navegación móvil.
-- **Comprensible:** lenguaje cotidiano, navegación consistente, límites explicados y errores contextualizados.
-- **Robusto:** encabezados, `main`, `nav`, formularios semánticos, enlaces para navegación y botones para acciones; ARIA solo para estado dinámico.
-
-## Microinteracciones y tareas de evaluación
-
-Entrada sutil de portada, elevación de categorías, zoom leve en fotos y animación de confirmación; todas se desactivan con `prefers-reduced-motion`. Comprobar antes de presentar: recorrido TAB/Shift+TAB/Enter/Espacio/Escape, lectura con lector de pantalla, ampliación al 200 %, contraste en dispositivos reales, campos de texto, pantalla pequeña y navegación entre vistas. Las fotografías y testimonios son ilustrativos, no afirmaciones verificadas de un negocio activo. No se adjuntó PDF académico en este entorno; este documento se basa solo en los requisitos descritos por el usuario.
+<p align="center">Hecho con 🌷 en Quito, Ecuador</p>
