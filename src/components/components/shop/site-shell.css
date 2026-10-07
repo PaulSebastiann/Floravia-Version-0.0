@@ -1,0 +1,13 @@
+.site-header,
+.header-tools,
+.header-search,
+.header-search input,
+.header-search button {
+  position: relative;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.header-search input {
+  user-select: text;
+}
