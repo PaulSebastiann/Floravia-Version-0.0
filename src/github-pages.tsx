@@ -10,7 +10,7 @@ const router = createRouter({
   routeTree,
   context: { queryClient: new QueryClient() },
   history: createHashHistory(),
-  scrollRestoration: true,
+  scrollRestoration: false,
   defaultPreloadStaleTime: 0,
 });
 
