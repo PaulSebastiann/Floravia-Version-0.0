@@ -4,9 +4,24 @@ import { ArrowRight, Instagram, Mail, MapPin, Menu, Search, ShoppingBag, X } fro
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import "./site-shell.css";
+
 export function SiteHeader() {
   const { count } = useStore();
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate({ to: "/productos", search: { q: query } as any });
+      setOpen(false);
+    } else {
+      navigate({ to: "/productos" });
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <a className="skip-link" href="#contenido">
@@ -40,18 +55,21 @@ export function SiteHeader() {
             </Link>
           </nav>
           <div className="header-tools">
-            <div className="header-search" role="search">
+            <form className="header-search" role="search" onSubmit={handleSearch}>
               <label className="sr-only" htmlFor="header-search">
                 Buscar flores
               </label>
               <input
                 id="header-search"
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar flores..."
               />
-              <Button asChild variant="ghost" size="icon" aria-label="Buscar" title="Buscar">
-                <Link to="/productos"><Search /></Link>
+              <Button type="submit" variant="ghost" size="icon" aria-label="Buscar" title="Buscar">
+                <Search />
               </Button>
-            </div>
+            </form>
             <Button
               asChild
               variant="ghost"
@@ -80,22 +98,28 @@ export function SiteHeader() {
         </div>
         {open && (
           <div id="mobile-nav" className="mobile-search">
-            <div role="search">
+            <form role="search" onSubmit={handleSearch}>
               <label htmlFor="mobile-query">Buscar flores</label>
               <div className="search-control">
                 <input
                   id="mobile-query"
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="¿Qué flores buscas?"
                 />
-                <Button asChild aria-label="Buscar"><Link to="/productos"><Search /></Link></Button>
+                <Button type="submit" aria-label="Buscar">
+                  <Search />
+                </Button>
               </div>
-            </div>
+            </form>
           </div>
         )}
       </header>
     </>
   );
 }
+
 export function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -145,6 +169,7 @@ export function SiteFooter() {
     </footer>
   );
 }
+
 export function SectionHeading({
   eyebrow,
   title,
@@ -171,6 +196,7 @@ export function SectionHeading({
     </div>
   );
 }
+
 export function Breadcrumbs({
   items,
 }: {
