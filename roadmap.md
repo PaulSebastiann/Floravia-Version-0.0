@@ -1,0 +1,3 @@
+- [x] Construir identidad visual, navegación y catálogo de 12 productos.
+- [x] Implementar detalle, carrito persistente y checkout simulado con validación.
+- [x] Revisar accesibilidad, móvil y flujo completo; documentar decisiones y limitaciones.
