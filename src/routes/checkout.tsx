@@ -1,43 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/shop/SiteShell";
 import { DELIVERY, money, products } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import "./checkout.css";
-const schema = z.object({
-  name: z.string().trim().min(2, "Escribe tu nombre y apellido (al menos 2 caracteres).").max(100),
-  email: z
-    .string()
-    .trim()
-    .email("Ingresa un correo válido, por ejemplo nombre@correo.com.")
-    .max(255),
-  phone: z
-    .string()
-    .regex(/^0\d{9}$/, "Ingresa un número de teléfono ecuatoriano válido de 10 dígitos."),
-  address: z
-    .string()
-    .trim()
-    .min(8, "Escribe una dirección completa de al menos 8 caracteres.")
-    .max(200),
-  reference: z.string().max(200),
-  date: z.string().min(1, "Selecciona una fecha de entrega."),
-  slot: z.string().min(1, "Selecciona un horario de entrega."),
-  payment: z.enum(["cash", "transfer"]),
-});
-type Data = z.infer<typeof schema>;
-const initial: Data = {
-  name: "",
-  email: "",
-  phone: "",
-  address: "",
-  reference: "",
-  date: "",
-  slot: "",
-  payment: "cash",
-};
 const steps = ["Información", "Entrega", "Pago", "Confirmación"];
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -60,12 +28,8 @@ export const Route = createFileRoute("/checkout")({
   component: Checkout,
 });
 function Checkout() {
-  const { cart, clear, notify, ready } = useStore();
-  const navigate = useNavigate();
+  const { cart, ready } = useStore();
   const [step, setStep] = useState(0);
-  const [data, setData] = useState<Data>(initial);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [sending, setSending] = useState(false);
   const lines = cart
     .map((line) => ({ line, product: products.find((p) => p.id === line.id) }))
     .filter(
@@ -76,77 +40,18 @@ function Checkout() {
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-  function set<K extends keyof Data>(key: K, value: Data[K]) {
-    setData((current) => ({ ...current, [key]: value }));
-    setErrors((current) => ({ ...current, [key]: "" }));
-  }
-  function field(key: keyof Data, label: string, type = "text", placeholder = "") {
+  function field(key: string, label: string, type = "text", placeholder = "") {
     return (
       <div className="field">
         <label htmlFor={key}>{label}</label>
         <input
           id={key}
           type={type}
-          value={data[key]}
-          onInput={(e) => set(key, e.currentTarget.value)}
           placeholder={placeholder}
-          aria-invalid={!!errors[key]}
-          aria-describedby={errors[key] ? `${key}-error` : undefined}
           maxLength={key === "phone" ? 10 : key === "address" ? 200 : 100}
         />
-        {errors[key] && (
-          <span className="field-error" id={`${key}-error`}>
-            {errors[key]}
-          </span>
-        )}
       </div>
     );
-  }
-  function next(e: FormEvent) {
-    e.preventDefault();
-    const parsed = schema.safeParse(data);
-    const fields =
-      step === 0 ? ["name", "email", "phone"] : step === 1 ? ["address", "date", "slot"] : [];
-    const found: Record<string, string> = {};
-    if (!parsed.success)
-      for (const issue of parsed.error.issues) {
-        const key = String(issue.path[0]);
-        if (fields.includes(key) && !found[key]) found[key] = issue.message;
-      }
-    if (step === 1 && data.date && data.date < minDate)
-      found["date"] = "Elige una fecha a partir de mañana.";
-    if (Object.keys(found).length) {
-      setErrors(found);
-      window.setTimeout(
-        () => document.querySelector<HTMLElement>(`#${Object.keys(found)[0]}`)?.focus(),
-        0,
-      );
-      return;
-    }
-    setErrors({});
-    if (step < 3) {
-      setStep(step + 1);
-      if (step < 2) notify("Los datos fueron guardados.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      if (!cart.length) return;
-      setSending(true);
-      const order = {
-        number: `FL-${Date.now().toString().slice(-8)}`,
-        items: lines.map(({ line, product }) => ({ name: product.name, quantity: line.quantity })),
-        date: data.date,
-        slot: data.slot,
-        address: data.address,
-        total,
-      };
-      try {
-        sessionStorage.setItem("floravia-last-order", JSON.stringify(order));
-        navigate({ to: "/confirmacion" }).then(() => clear());
-      } catch {
-        setSending(false);
-        notify("No pudimos guardar el pedido. Intenta nuevamente.");
-      }
-    }
   }
   if (!ready)
     return (
@@ -196,7 +101,7 @@ function Checkout() {
         ))}
       </ol>
       <div className="checkout-layout">
-        <form className="checkout-form" onSubmit={next} noValidate>
+        <div className="checkout-form">
           {step === 0 && (
             <>
               <h2>Tu información</h2>
@@ -225,8 +130,6 @@ function Checkout() {
                 <label htmlFor="reference">Referencia para encontrar el lugar (opcional)</label>
                 <textarea
                   id="reference"
-                  value={data.reference}
-                  onInput={(e) => set("reference", e.currentTarget.value)}
                   maxLength={200}
                   placeholder="Edificio, piso o indicación útil"
                 />
@@ -239,37 +142,19 @@ function Checkout() {
                       id="date"
                       type="date"
                       min={minDate}
-                      value={data.date}
-                      onInput={(e) => set("date", e.currentTarget.value)}
-                      aria-invalid={!!errors["date"]}
-                      aria-describedby={errors["date"] ? "date-error" : undefined}
                     />
-                    {errors["date"] && (
-                      <span className="field-error" id="date-error">
-                        {errors["date"]}
-                      </span>
-                    )}
                   </div>
                 }
                 <div className="field">
                   <label htmlFor="slot">Horario de entrega</label>
                   <select
                     id="slot"
-                    value={data.slot}
-                      onInput={(e) => set("slot", e.currentTarget.value)}
-                    aria-invalid={!!errors["slot"]}
-                    aria-describedby={errors["slot"] ? "slot-error" : undefined}
                   >
                     <option value="">Selecciona un horario</option>
                     <option value="09:00–12:00">09:00–12:00</option>
                     <option value="12:00–15:00">12:00–15:00</option>
                     <option value="15:00–18:00">15:00–18:00</option>
                   </select>
-                  {errors["slot"] && (
-                    <span className="field-error" id="slot-error">
-                      {errors["slot"]}
-                    </span>
-                  )}
                 </div>
               </div>
             </>
@@ -285,8 +170,7 @@ function Checkout() {
                 <input
                   type="radio"
                   name="payment"
-                  checked={data.payment === "cash"}
-                    onInput={() => set("payment", "cash")}
+                  defaultChecked
                 />
                 <span>
                   <strong>Pago contra entrega (simulado)</strong>
@@ -297,8 +181,6 @@ function Checkout() {
                 <input
                   type="radio"
                   name="payment"
-                  checked={data.payment === "transfer"}
-                    onInput={() => set("payment", "transfer")}
                 />
                 <span>
                   <strong>Transferencia (simulada)</strong>
@@ -316,20 +198,17 @@ function Checkout() {
               </p>
               <ul className="review-list">
                 <li>
-                  <strong>Contacto:</strong> {data.name} · {data.email} · {data.phone}
+                  <strong>Contacto:</strong> Completa los campos visuales de contacto.
                 </li>
                 <li>
-                  <strong>Dirección:</strong> {data.address}
-                  {data.reference ? ` · ${data.reference}` : ""}, Quito
+                  <strong>Dirección:</strong> Completa la dirección visual de entrega, Quito.
                 </li>
                 <li>
-                  <strong>Entrega:</strong> {data.date} · {data.slot}
+                  <strong>Entrega:</strong> Selecciona una fecha y horario visuales.
                 </li>
                 <li>
                   <strong>Pago:</strong>{" "}
-                  {data.payment === "cash"
-                    ? "Contra entrega (simulado)"
-                    : "Transferencia (simulada)"}
+                  Contra entrega (simulado)
                 </li>
                 {lines.map(({ line, product }) => (
                   <li key={line.id}>
@@ -358,19 +237,9 @@ function Checkout() {
                 </Link>
               </Button>
             )}
-            <Button type="submit" disabled={sending}>
-              {step === 3 ? (
-                <>
-                  <Check /> {sending ? "Confirmando..." : "Confirmar pedido simulado"}
-                </>
-              ) : (
-                <>
-                  Continuar <ArrowRight />
-                </>
-              )}
-            </Button>
+            {step === 3 ? <Button asChild><Link to="/confirmacion"><Check /> Ver confirmación</Link></Button> : <Button type="button" onClick={() => setStep(step + 1)}>Continuar <ArrowRight /></Button>}
           </div>
-        </form>
+        </div>
         <aside className="summary" aria-label="Resumen del pedido">
           <h2>Tu pedido</h2>
           {lines.map(({ line, product }) => (

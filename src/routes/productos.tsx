@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, useEffect } from "react";
 import { Flower2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/shop/SiteShell";
@@ -27,45 +26,7 @@ export const Route = createFileRoute("/productos")({
   component: Catalog,
 });
 function Catalog() {
-  const search = Route.useSearch();
-  const [query, setQuery] = useState(search["q"] || "");
-  const [occasion, setOccasion] = useState(search["ocasion"] || "");
-  const [category, setCategory] = useState("");
-  const [color, setColor] = useState("");
-  const [maxPrice, setMaxPrice] = useState(80);
-  const [available, setAvailable] = useState(false);
-  const [sort, setSort] = useState("relevance");
-  useEffect(() => {
-    setQuery(search.q || "");
-    setOccasion(search.ocasion || "");
-  }, [search.q, search.ocasion]);
-  const filtered = useMemo(() => {
-    let found = products.filter(
-      (p) =>
-        (!query ||
-          `${p.name} ${p.description} ${p.occasion}`
-            .toLocaleLowerCase("es")
-            .includes(query.toLocaleLowerCase("es"))) &&
-        (!occasion || occasion === "Cualquier ocasión" || p.occasion === occasion) &&
-        (!category || p.category === category) &&
-        (!color || p.color === color) &&
-        p.price <= maxPrice &&
-        (!available || p.available),
-    );
-    if (sort === "low") found.sort((a, b) => a.price - b.price);
-    if (sort === "high") found.sort((a, b) => b.price - a.price);
-    if (sort === "best") found.sort((a, b) => a.bestseller - b.bestseller);
-    return found;
-  }, [query, occasion, category, color, maxPrice, available, sort]);
-  function reset() {
-    setQuery("");
-    setOccasion("");
-    setCategory("");
-    setColor("");
-    setMaxPrice(80);
-    setAvailable(false);
-    setSort("relevance");
-  }
+  const filtered = products;
   return (
     <div className="container">
       <div className="page-intro">
@@ -83,8 +44,6 @@ function Catalog() {
               <label key={v}>
                 <input
                   type="checkbox"
-                  checked={category === v}
-                  onInput={() => setCategory(category === v ? "" : v)}
                 />
                 {v}
               </label>
@@ -96,8 +55,6 @@ function Catalog() {
               <label key={v}>
                 <input
                   type="checkbox"
-                  checked={occasion === v}
-                  onInput={() => setOccasion(occasion === v ? "" : v)}
                 />
                 {v}
               </label>
@@ -109,15 +66,13 @@ function Catalog() {
               <label key={v}>
                 <input
                   type="checkbox"
-                  checked={color === v}
-                  onInput={() => setColor(color === v ? "" : v)}
                 />
                 {v}
               </label>
             ))}
           </div>
           <div className="filter-group">
-            <h3>Precio máximo: ${maxPrice}</h3>
+            <h3>Precio máximo: $80</h3>
             <label htmlFor="price-filter" className="sr-only">
               Precio máximo en dólares
             </label>
@@ -127,8 +82,6 @@ function Catalog() {
               min="35"
               max="80"
               step="1"
-              value={maxPrice}
-                onInput={(e) => setMaxPrice(Number(e.currentTarget.value))}
               style={{ width: "100%" }}
             />
           </div>
@@ -137,13 +90,11 @@ function Catalog() {
             <label>
               <input
                 type="checkbox"
-                checked={available}
-                onInput={(e) => setAvailable(e.currentTarget.checked)}
               />{" "}
               Solo disponibles
             </label>
           </div>
-          <Button variant="outline" onClick={reset}>
+          <Button variant="outline">
             Limpiar filtros
           </Button>
         </aside>
@@ -156,8 +107,6 @@ function Catalog() {
               id="catalog-query"
               type="search"
               placeholder="Busca por nombre, flor u ocasión"
-              value={query}
-                onInput={(e) => setQuery(e.currentTarget.value)}
             />
           </div>
           <div className="catalog-controls">
@@ -166,7 +115,7 @@ function Catalog() {
             </p>
             <label>
               Ordenar por{" "}
-              <select value={sort} onInput={(e) => setSort(e.currentTarget.value)}>
+              <select defaultValue="relevance">
                 <option value="relevance">Relevancia</option>
                 <option value="low">Precio: menor a mayor</option>
                 <option value="high">Precio: mayor a menor</option>
@@ -185,7 +134,7 @@ function Catalog() {
               <Flower2 size={40} />
               <h2>No encontramos flores</h2>
               <p>Prueba con otra búsqueda o elimina algún filtro.</p>
-              <Button onClick={reset}>Ver todas las flores</Button>
+              <Button>Ver todas las flores</Button>
             </div>
           )}
         </div>

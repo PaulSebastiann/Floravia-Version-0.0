@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { ArrowRight, Instagram, Mail, MapPin, Menu, Search, ShoppingBag, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
@@ -7,13 +7,6 @@ import "./site-shell.css";
 export function SiteHeader() {
   const { count } = useStore();
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-  function search(e: FormEvent) {
-    e.preventDefault();
-    navigate({ to: "/productos", search: { q: query.trim() } });
-    setOpen(false);
-  }
   return (
     <>
       <a className="skip-link" href="#contenido">
@@ -47,20 +40,18 @@ export function SiteHeader() {
             </Link>
           </nav>
           <div className="header-tools">
-            <form className="header-search" role="search" onSubmit={search}>
+            <div className="header-search" role="search">
               <label className="sr-only" htmlFor="header-search">
                 Buscar flores
               </label>
               <input
                 id="header-search"
                 placeholder="Buscar flores..."
-                value={query}
-                onInput={(e) => setQuery(e.currentTarget.value)}
               />
-              <Button type="submit" variant="ghost" size="icon" aria-label="Buscar" title="Buscar">
-                <Search />
+              <Button asChild variant="ghost" size="icon" aria-label="Buscar" title="Buscar">
+                <Link to="/productos"><Search /></Link>
               </Button>
-            </form>
+            </div>
             <Button
               asChild
               variant="ghost"
@@ -89,20 +80,16 @@ export function SiteHeader() {
         </div>
         {open && (
           <div id="mobile-nav" className="mobile-search">
-            <form role="search" onSubmit={search}>
+            <div role="search">
               <label htmlFor="mobile-query">Buscar flores</label>
               <div className="search-control">
                 <input
                   id="mobile-query"
-                  value={query}
-                  onInput={(e) => setQuery(e.currentTarget.value)}
                   placeholder="¿Qué flores buscas?"
                 />
-                <Button type="submit" aria-label="Buscar">
-                  <Search />
-                </Button>
+                <Button asChild aria-label="Buscar"><Link to="/productos"><Search /></Link></Button>
               </div>
-            </form>
+            </div>
           </div>
         )}
       </header>
