@@ -7,6 +7,17 @@ import { DELIVERY, money, products } from "@/lib/products";
 import { useStore } from "@/lib/store";
 import "./checkout.css";
 const steps = ["Información", "Entrega", "Pago", "Confirmación"];
+type CheckoutForm = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  reference: string;
+  date: string;
+  slot: string;
+  payment: "delivery" | "transfer";
+};
+
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
@@ -30,6 +41,19 @@ export const Route = createFileRoute("/checkout")({
 function Checkout() {
   const { cart, ready } = useStore();
   const [step, setStep] = useState(0);
+  const [form, setForm] = useState<CheckoutForm>({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    reference: "",
+    date: "",
+    slot: "",
+    payment: "delivery",
+  });
+  const updateField = <T extends keyof CheckoutForm>(fieldName: T, value: CheckoutForm[T]) => {
+    setForm((current) => ({ ...current, [fieldName]: value }));
+  };
   const lines = cart
     .map((line) => ({ line, product: products.find((p) => p.id === line.id) }))
     .filter(
@@ -40,13 +64,20 @@ function Checkout() {
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-  function field(key: string, label: string, type = "text", placeholder = "") {
+  function field(
+    key: Exclude<keyof CheckoutForm, "reference" | "date" | "slot" | "payment">,
+    label: string,
+    type = "text",
+    placeholder = "",
+  ) {
     return (
       <div className="field">
         <label htmlFor={key}>{label}</label>
         <input
           id={key}
           type={type}
+          value={form[key]}
+          onChange={(event) => updateField(key, event.target.value)}
           placeholder={placeholder}
           maxLength={key === "phone" ? 10 : key === "address" ? 200 : 100}
         />
@@ -118,6 +149,8 @@ function Checkout() {
                 <label htmlFor="reference">Referencia para encontrar el lugar (opcional)</label>
                 <textarea
                   id="reference"
+                  value={form.reference}
+                  onChange={(event) => updateField("reference", event.target.value)}
                   maxLength={200}
                   placeholder="Edificio, piso o indicación útil"
                 />
@@ -130,6 +163,8 @@ function Checkout() {
                       id="date"
                       type="date"
                       min={minDate}
+                      value={form.date}
+                      onChange={(event) => updateField("date", event.target.value)}
                     />
                   </div>
                 }
@@ -137,6 +172,8 @@ function Checkout() {
                   <label htmlFor="slot">Horario de entrega</label>
                   <select
                     id="slot"
+                    value={form.slot}
+                    onChange={(event) => updateField("slot", event.target.value)}
                   >
                     <option value="">Selecciona un horario</option>
                     <option value="09:00–12:00">09:00–12:00</option>
@@ -158,7 +195,9 @@ function Checkout() {
                 <input
                   type="radio"
                   name="payment"
-                  defaultChecked
+                  value="delivery"
+                  checked={form.payment === "delivery"}
+                  onChange={(event) => updateField("payment", event.target.value as "delivery")}
                 />
                 <span>
                   <strong>Pago contra entrega (simulado)</strong>
@@ -169,6 +208,9 @@ function Checkout() {
                 <input
                   type="radio"
                   name="payment"
+                  value="transfer"
+                  checked={form.payment === "transfer"}
+                  onChange={(event) => updateField("payment", event.target.value as "transfer")}
                 />
                 <span>
                   <strong>Transferencia (simulada)</strong>
