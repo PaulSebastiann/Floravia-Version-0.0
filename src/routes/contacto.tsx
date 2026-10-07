@@ -168,14 +168,9 @@ function Contact() {
             <span className="eyebrow">Encuentranos</span>
             <h2 id="mapa-title">Quito, Ecuador</h2>
           </div>
-          {/* Reemplaza el src por la ubicacion exacta del local cuando tengas la direccion definitiva. */}
-          <iframe
-            className="contact-map"
-            title="Mapa de Quito, Ecuador"
-            src="https://www.google.com/maps?q=Quito%2C%20Ecuador&output=embed"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+          <div className="contact-map" role="img" aria-label="Referencia visual de Quito, Ecuador">
+            Quito, Ecuador
+          </div>
         </section>
 
         <section className="faq-section" aria-labelledby="faq-title">
