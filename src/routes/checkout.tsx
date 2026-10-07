@@ -61,18 +61,6 @@ function Checkout() {
         </div>
       </div>
     );
-  if (!cart.length)
-    return (
-      <div className="container">
-        <div className="page-intro">
-          <h1 className="page-title">Tu carrito está vacío</h1>
-          <p>Agrega flores antes de continuar con el pedido.</p>
-          <Button asChild>
-            <Link to="/productos">Explorar flores</Link>
-          </Button>
-        </div>
-      </div>
-    );
   return (
     <div className="container">
       <div className="page-intro">
