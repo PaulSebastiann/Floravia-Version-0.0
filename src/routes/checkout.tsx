@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/shop/SiteShell";
 import { DELIVERY, money, products } from "@/lib/products";
 import { useStore } from "@/lib/store";
+import "./checkout.css";
 const schema=z.object({name:z.string().trim().min(2,"Escribe tu nombre y apellido (al menos 2 caracteres).").max(100),email:z.string().trim().email("Ingresa un correo válido, por ejemplo nombre@correo.com.").max(255),phone:z.string().regex(/^0\d{9}$/,"Ingresa un número de teléfono ecuatoriano válido de 10 dígitos."),address:z.string().trim().min(8,"Escribe una dirección completa de al menos 8 caracteres.").max(200),reference:z.string().max(200),date:z.string().min(1,"Selecciona una fecha de entrega."),slot:z.string().min(1,"Selecciona un horario de entrega."),payment:z.enum(["cash","transfer"])});
 type Data=z.infer<typeof schema>;
 const initial:Data={name:"",email:"",phone:"",address:"",reference:"",date:"",slot:"",payment:"cash"};

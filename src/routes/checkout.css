@@ -1,0 +1,10 @@
+.checkout-form,
+.checkout-form .field,
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  user-select: text;
+}
