@@ -138,7 +138,7 @@ function Contact() {
               <Field label="Telefono" id="phone" type="tel" value={values.phone} error={errors.phone} onChange={(value) => updateValue("phone", value)} />
               <div className="field">
                 <label htmlFor="interest">Me interesa</label>
-                <select id="interest" value={values.interest} aria-invalid={Boolean(errors.interest)} onChange={(event) => updateValue("interest", event.target.value)}>
+                <select id="interest" value={values.interest} aria-invalid={Boolean(errors.interest)} onInput={(event) => updateValue("interest", event.currentTarget.value)}>
                   <option value="">Selecciona una opcion</option>
                   <option>Flores</option>
                   <option>Plantas</option>
@@ -151,7 +151,7 @@ function Contact() {
             </div>
             <div className="field">
               <label htmlFor="message">Mensaje</label>
-              <textarea id="message" value={values.message} aria-invalid={Boolean(errors.message)} onChange={(event) => updateValue("message", event.target.value)} placeholder="Cuentanos como podemos ayudarte." />
+              <textarea id="message" value={values.message} aria-invalid={Boolean(errors.message)} onInput={(event) => updateValue("message", event.currentTarget.value)} placeholder="Cuentanos como podemos ayudarte." />
               {errors.message && <span className="field-error">{errors.message}</span>}
             </div>
             <Button type="submit" disabled={sending}>{sending ? "Enviando..." : "Enviar"}</Button>
@@ -186,5 +186,5 @@ function Contact() {
 }
 
 function Field({ label, id, type = "text", value, error, onChange }: { label: string; id: keyof FormValues; type?: string; value: string; error?: string; onChange: (value: string) => void }) {
-  return <div className="field"><label htmlFor={id}>{label}</label><input id={id} type={type} value={value} aria-invalid={Boolean(error)} onChange={(event) => onChange(event.target.value)} />{error && <span className="field-error">{error}</span>}</div>;
+  return <div className="field"><label htmlFor={id}>{label}</label><input id={id} type={type} value={value} aria-invalid={Boolean(error)} onInput={(event) => onChange(event.currentTarget.value)} />{error && <span className="field-error">{error}</span>}</div>;
 }

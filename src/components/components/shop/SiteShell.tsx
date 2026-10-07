@@ -4,7 +4,204 @@ import { ArrowRight, Instagram, Mail, MapPin, Menu, Search, ShoppingBag, X } fro
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import "./site-shell.css";
-export function SiteHeader(){const {count}=useStore();const [open,setOpen]=useState(false);const [query,setQuery]=useState("");const navigate=useNavigate();function search(e:FormEvent){e.preventDefault();navigate({to:"/productos",search:{q:query.trim()}});setOpen(false)}return <><a className="skip-link" href="#contenido">Saltar al contenido</a><div className="announcement">Flores frescas, momentos inolvidables · Entregas en Quito</div><header className="site-header"><div className="header-inner"><Link to="/" className="brand" aria-label="Floravia, ir al inicio"><span className="brand-mark">✳</span> floravia<span className="brand-dot">.</span></Link><nav className={open?"main-nav open":"main-nav"} aria-label="Navegación principal"><Link to="/" onClick={()=>setOpen(false)}>Inicio</Link><Link to="/productos" onClick={()=>setOpen(false)}>Flores</Link><Link to="/productos" search={{ocasion:"Cualquier ocasión"}} onClick={()=>setOpen(false)}>Ocasiones</Link><Link to="/nosotros" onClick={()=>setOpen(false)}>Nosotros</Link><Link to="/contacto" onClick={()=>setOpen(false)}>Contacto</Link></nav><div className="header-tools"><form className="header-search" role="search" onSubmit={search}><label className="sr-only" htmlFor="header-search">Buscar flores</label><input id="header-search" placeholder="Buscar flores..." value={query} onChange={e=>setQuery(e.target.value)} /><Button type="submit" variant="ghost" size="icon" aria-label="Buscar" title="Buscar"><Search/></Button></form><Button asChild variant="ghost" size="icon" className="cart-link" aria-label={`Carrito, ${count} productos`} title="Ver carrito"><Link to="/carrito"><ShoppingBag/><span className="cart-count">{count}</span></Link></Button><Button variant="ghost" size="icon" className="menu-toggle" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Cerrar menú":"Abrir menú"}>{open?<X/>:<Menu/>}</Button></div></div>{open&&<div id="mobile-nav" className="mobile-search"><form role="search" onSubmit={search}><label htmlFor="mobile-query">Buscar flores</label><div className="search-control"><input id="mobile-query" value={query} onChange={e=>setQuery(e.target.value)} placeholder="¿Qué flores buscas?"/><Button type="submit" aria-label="Buscar"><Search/></Button></div></form></div>}</header></>}
-export function SiteFooter(){return <footer className="site-footer"><div className="footer-inner"><div className="footer-brand"><Link to="/" className="brand"><span className="brand-mark">✳</span> floravia<span className="brand-dot">.</span></Link><p>Flores que acompañan lo que sientes. Arreglos hechos con cariño para cada momento en Quito.</p></div><div><h2>Explora</h2><Link to="/productos">Todas las flores</Link><Link to="/productos" search={{ocasion:"Amor"}}>Para el amor</Link><Link to="/nosotros">Nuestra historia</Link><Link to="/contacto">Contacto y ayuda</Link></div><div><h2>Información</h2><p>Entregas únicamente en Quito</p><p>Horario de atención: por confirmar</p><p>Pago simulado para demostración</p><Link to="/contacto">Políticas y consultas</Link></div><div><h2>Conversemos</h2><p><MapPin size={16}/> Quito, Ecuador</p><Link to="/contacto"><Mail size={16}/> Escríbenos</Link><span className="footer-social"><Instagram size={16}/> Redes sociales: por confirmar</span></div></div><div className="footer-bottom"><span>© Floravia · Una tienda de flores hecha para Quito</span><span>Precios en USD · Compra de demostración</span></div></footer>}
-export function SectionHeading({eyebrow,title,description,action}:{eyebrow:string;title:string;description?:string;action?:boolean}){return <div className="section-heading"><div><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{description&&<p>{description}</p>}</div>{action&&<Link className="text-link" to="/productos">Ver todas las flores <ArrowRight size={18}/></Link>}</div>}
-export function Breadcrumbs({items}:{items:{label:string;to?:"/"|"/productos"|"/carrito"}[]}){return <nav aria-label="Ruta de navegación" className="breadcrumbs"><ol>{items.map((item,i)=><li key={i}>{item.to?<Link to={item.to}>{item.label}</Link>:<span aria-current="page">{item.label}</span>}</li>)}</ol></nav>}
+export function SiteHeader() {
+  const { count } = useStore();
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+  function search(e: FormEvent) {
+    e.preventDefault();
+    navigate({ to: "/productos", search: { q: query.trim() } });
+    setOpen(false);
+  }
+  return (
+    <>
+      <a className="skip-link" href="#contenido">
+        Saltar al contenido
+      </a>
+      <div className="announcement">Flores frescas, momentos inolvidables · Entregas en Quito</div>
+      <header className="site-header">
+        <div className="header-inner">
+          <Link to="/" className="brand" aria-label="Floravia, ir al inicio">
+            <span className="brand-mark">✳</span> floravia<span className="brand-dot">.</span>
+          </Link>
+          <nav className={open ? "main-nav open" : "main-nav"} aria-label="Navegación principal">
+            <Link to="/" onClick={() => setOpen(false)}>
+              Inicio
+            </Link>
+            <Link to="/productos" onClick={() => setOpen(false)}>
+              Flores
+            </Link>
+            <Link
+              to="/productos"
+              search={{ ocasion: "Cualquier ocasión" }}
+              onClick={() => setOpen(false)}
+            >
+              Ocasiones
+            </Link>
+            <Link to="/nosotros" onClick={() => setOpen(false)}>
+              Nosotros
+            </Link>
+            <Link to="/contacto" onClick={() => setOpen(false)}>
+              Contacto
+            </Link>
+          </nav>
+          <div className="header-tools">
+            <form className="header-search" role="search" onSubmit={search}>
+              <label className="sr-only" htmlFor="header-search">
+                Buscar flores
+              </label>
+              <input
+                id="header-search"
+                placeholder="Buscar flores..."
+                value={query}
+                onInput={(e) => setQuery(e.currentTarget.value)}
+              />
+              <Button type="submit" variant="ghost" size="icon" aria-label="Buscar" title="Buscar">
+                <Search />
+              </Button>
+            </form>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className="cart-link"
+              aria-label={`Carrito, ${count} productos`}
+              title="Ver carrito"
+            >
+              <Link to="/carrito">
+                <ShoppingBag />
+                <span className="cart-count">{count}</span>
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="menu-toggle"
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-controls="mobile-nav"
+              aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            >
+              {open ? <X /> : <Menu />}
+            </Button>
+          </div>
+        </div>
+        {open && (
+          <div id="mobile-nav" className="mobile-search">
+            <form role="search" onSubmit={search}>
+              <label htmlFor="mobile-query">Buscar flores</label>
+              <div className="search-control">
+                <input
+                  id="mobile-query"
+                  value={query}
+                  onInput={(e) => setQuery(e.currentTarget.value)}
+                  placeholder="¿Qué flores buscas?"
+                />
+                <Button type="submit" aria-label="Buscar">
+                  <Search />
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
+      </header>
+    </>
+  );
+}
+export function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <Link to="/" className="brand">
+            <span className="brand-mark">✳</span> floravia<span className="brand-dot">.</span>
+          </Link>
+          <p>
+            Flores que acompañan lo que sientes. Arreglos hechos con cariño para cada momento en
+            Quito.
+          </p>
+        </div>
+        <div>
+          <h2>Explora</h2>
+          <Link to="/productos">Todas las flores</Link>
+          <Link to="/productos" search={{ ocasion: "Amor" }}>
+            Para el amor
+          </Link>
+          <Link to="/nosotros">Nuestra historia</Link>
+          <Link to="/contacto">Contacto y ayuda</Link>
+        </div>
+        <div>
+          <h2>Información</h2>
+          <p>Entregas únicamente en Quito</p>
+          <p>Horario de atención: por confirmar</p>
+          <p>Pago simulado para demostración</p>
+          <Link to="/contacto">Políticas y consultas</Link>
+        </div>
+        <div>
+          <h2>Conversemos</h2>
+          <p>
+            <MapPin size={16} /> Quito, Ecuador
+          </p>
+          <Link to="/contacto">
+            <Mail size={16} /> Escríbenos
+          </Link>
+          <span className="footer-social">
+            <Instagram size={16} /> Redes sociales: por confirmar
+          </span>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <span>© Floravia · Una tienda de flores hecha para Quito</span>
+        <span>Precios en USD · Compra de demostración</span>
+      </div>
+    </footer>
+  );
+}
+export function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  action?: boolean;
+}) {
+  return (
+    <div className="section-heading">
+      <div>
+        <span className="eyebrow">{eyebrow}</span>
+        <h2>{title}</h2>
+        {description && <p>{description}</p>}
+      </div>
+      {action && (
+        <Link className="text-link" to="/productos">
+          Ver todas las flores <ArrowRight size={18} />
+        </Link>
+      )}
+    </div>
+  );
+}
+export function Breadcrumbs({
+  items,
+}: {
+  items: { label: string; to?: "/" | "/productos" | "/carrito" }[];
+}) {
+  return (
+    <nav aria-label="Ruta de navegación" className="breadcrumbs">
+      <ol>
+        {items.map((item, i) => (
+          <li key={i}>
+            {item.to ? (
+              <Link to={item.to}>{item.label}</Link>
+            ) : (
+              <span aria-current="page">{item.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
